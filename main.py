@@ -56,7 +56,7 @@ class MainInterface(qtw.QMainWindow):
         self.window.show()
 
     
-    def load_interface(self, initial_id=None):
+    def load_interface(self):
         '''
             list is return from db.read_db() as follows:
             (
@@ -81,14 +81,14 @@ class MainInterface(qtw.QMainWindow):
             list_name = f'{c[1]}, {c[2]}'
             contact_names.append(list_name)
             list_dict[list_name] = c[0]
-        if not initial_id:
-            initial_id = contacts[0][0]
-
-        initial_contact = db.get_contact(initial_id)
-        logger.info(initial_contact)
+        contact_names.sort()
         self.lw_contact_list.addItems(contact_names)
-        self.lw_contact_list.setCurrentRow(initial_id)
+        self.lw_contact_list.setCurrentRow(0)
+        c_id = list_dict[contact_names[0]]
+        initial_contact = db.get_contact(c_id)
         self.lbl_full_name.setText(f'{initial_contact[2]} {initial_contact[1]}')
+
+        logger.info(initial_contact)
 
 
     def get_item(self):
