@@ -44,9 +44,10 @@ def get_cursor():
 
 
 def build_db():
+    sql = scripts.create_table_sql
     conn = sqlite3.connect(db)
     cur = conn.cursor()
-    cur.execute(build_sql)
+    cur.execute(sql)
     conn.commit()
 
 
@@ -66,6 +67,36 @@ def add_contact(last, first, company, email, home_phone, work_phone):
     cur = conn.cursor()
     cur.execute(sql, params)
     conn.commit()
+
+
+def update_contact(params:dict):
+
+    sql = scripts.update_contact_sql
+    last_name = params.get('last', None)
+    first_name = params.get('first', None)
+    company = params.get('company', None)
+    email = params.get('email', None)
+    home_phone = params.get('home', None)
+    work_phone = params.get('work', None)
+    notes = params.get('notes', None)
+    contact_id = params.get('contact_id', None)
+
+    sql_params = [
+        last_name,
+        first_name,
+        company,
+        email,
+        home_phone,
+        work_phone,
+        notes,
+        contact_id
+    ]
+    print(sql_params)
+    conn = sqlite3.connect(db)
+    cur = conn.cursor()
+    cur.execute(sql, sql_params)
+    conn.commit()
+
 
 
 def load_test_data(test_data):
