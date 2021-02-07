@@ -60,6 +60,15 @@ def read_db():
     return contacts
 
 
+def get_contact(contact_id:int) -> list:
+    sql = scripts.get_contact_sql
+    conn = sqlite3.connect(db)
+    cur = conn.cursor()
+    cur.execute(sql, (contact_id,))
+    contact = [c for c in cur.fetchone()]
+    return contact
+
+
 def add_contact(last, first, company, email, home_phone, work_phone):
     sql = scripts.add_conctact_sql
     params = (last, first, company, email, home_phone, work_phone)
@@ -69,28 +78,28 @@ def add_contact(last, first, company, email, home_phone, work_phone):
     conn.commit()
 
 
-def update_contact(params:dict):
+def update_contact(contact:list):
 
     sql = scripts.update_contact_sql
-    last_name = params.get('last', None)
-    first_name = params.get('first', None)
-    company = params.get('company', None)
-    email = params.get('email', None)
-    home_phone = params.get('home', None)
-    work_phone = params.get('work', None)
-    notes = params.get('notes', None)
-    contact_id = params.get('contact_id', None)
+    # last_name = params.get('last', None)
+    # first_name = params.get('first', None)
+    # company = params.get('company', None)
+    # email = params.get('email', None)
+    # home_phone = params.get('home', None)
+    # work_phone = params.get('work', None)
+    # notes = params.get('notes', None)
+    # contact_id = params.get('contact_id', None)
 
-    sql_params = [
-        last_name,
-        first_name,
-        company,
-        email,
-        home_phone,
-        work_phone,
-        notes,
-        contact_id
-    ]
+    sql_params = (
+        contact[1],
+        contact[2],
+        contact[3],
+        contact[4],
+        contact[5],
+        contact[6],
+        contact[7],
+        contact[0]
+    )
     print(sql_params)
     conn = sqlite3.connect(db)
     cur = conn.cursor()

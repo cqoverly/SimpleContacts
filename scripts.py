@@ -1,4 +1,4 @@
-create_table_sql = '''
+create_table_sql = """
         CREATE TABLE contacts (
         contact_id INTEGER PRIMARY KEY AUTOINCREMENT,
         last_name CHAR(45),
@@ -9,10 +9,16 @@ create_table_sql = '''
         work_phone VARCHAR(20),
         notes TEXT
     );
-    '''
+    """
+
+get_contact_sql = """
+    SELECT *
+    FROM contacts
+    WHERE contact_id = ?
+"""
 
 
-add_conctact_sql = '''
+add_conctact_sql = """
     INSERT INTO contacts (
             last_name,
             first_name,
@@ -22,10 +28,17 @@ add_conctact_sql = '''
             work_phone
         )
         VALUES (?,?,?,?,?,?);
-    '''
+    """
 
 
-update_contact_sql = '''
-    UPDATE contacts SET last_name = ?, first_name = ?, company = ?, email = ?, home_phone = ?, work_phone = ?, notes = ?
+update_contact_sql = """
+    UPDATE contacts 
+    SET last_name = ?,
+    first_name = ?,
+    company = ?,
+    email = ?,
+    home_phone = ?,
+    work_phone = ?,
+    notes = ?
     WHERE contact_id = ?;
-'''
+"""
