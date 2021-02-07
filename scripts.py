@@ -10,6 +10,10 @@ create_table_sql = """
         notes TEXT
     );
     """
+get_all_contacts_sql = """
+    SELECT *
+    FROM contacts
+"""
 
 get_contact_sql = """
     SELECT *
