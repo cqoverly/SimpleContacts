@@ -14,16 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QListView" name="listView">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>181</width>
-      <height>481</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btn_new_contact">
     <property name="geometry">
      <rect>
@@ -38,6 +28,9 @@
     </property>
    </widget>
    <widget class="QLineEdit" name="le_last_name">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>210</x>
@@ -64,6 +57,9 @@
     </property>
    </widget>
    <widget class="QLineEdit" name="le_first_name">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>380</x>
@@ -89,7 +85,7 @@
      <string>First</string>
     </property>
    </widget>
-   <widget class="QTextEdit" name="notes">
+   <widget class="QTextEdit" name="te_notes">
     <property name="geometry">
      <rect>
       <x>210</x>
@@ -100,6 +96,9 @@
     </property>
    </widget>
    <widget class="QLineEdit" name="le_email">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>210</x>
@@ -136,6 +135,9 @@
     </property>
    </widget>
    <widget class="QLineEdit" name="le_home_phone">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>210</x>
@@ -161,7 +163,10 @@
      <string>Work Phone</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="le_home_phone_2">
+   <widget class="QLineEdit" name="le_work_phone">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -232,13 +237,26 @@
      <string>Company</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="le_company">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>210</x>
       <y>130</y>
       <width>311</width>
       <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="lw_contact_list">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>11</y>
+      <width>181</width>
+      <height>481</height>
      </rect>
     </property>
    </widget>
@@ -260,10 +278,9 @@
   <tabstop>le_first_name</tabstop>
   <tabstop>le_email</tabstop>
   <tabstop>le_home_phone</tabstop>
-  <tabstop>le_home_phone_2</tabstop>
-  <tabstop>notes</tabstop>
+  <tabstop>le_work_phone</tabstop>
+  <tabstop>te_notes</tabstop>
   <tabstop>btn_new_contact</tabstop>
-  <tabstop>listView</tabstop>
  </tabstops>
  <resources/>
  <connections/>
