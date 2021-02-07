@@ -1,28 +1,15 @@
+import logging
 import sqlite3
 from pathlib import Path
 
 import scripts
 
-build_sql = """
-CREATE TABLE contacts (
-    contact_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    last_name CHAR(45),
-    first_name CHAR(30),
-    company CHAR(128),
-    email CHAR(64),
-    home_phone VARCHAR(20),
-    work_phone VARCHAR(20),
-    notes TEXT
-);
-"""
-
-read_sql = """
-    SELECT *
-    FROM contacts
-"""
+logger = logging.getLogger('app_logger')
+logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(process)d - %(levelname)s - %(message)s')
 
 db = "contacts.db"
-
 
 def check_db():
     if not Path(db).is_file():
@@ -35,6 +22,7 @@ def check_db():
             reader = csv.reader(test_file)
             test_data = [r for r in reader]
         load_test_data(test_data)
+        logger.info('Test dabase created.')
 
 
 def get_cursor():
@@ -52,15 +40,16 @@ def build_db():
 
 
 def read_db():
+    sql = scripts.get_all_contacts_sql
     check_db()
     contacts = []
     cur = get_cursor()
-    cur.execute(read_sql)
+    cur.execute(sql)
     contacts = [c for c in cur]
     return contacts
 
 
-def get_contact(contact_id:int) -> list:
+def get_contact(contact_id: int) -> list:
     sql = scripts.get_contact_sql
     conn = sqlite3.connect(db)
     cur = conn.cursor()
@@ -78,17 +67,9 @@ def add_contact(last, first, company, email, home_phone, work_phone):
     conn.commit()
 
 
-def update_contact(contact:list):
+def update_contact(contact: list):
 
-    sql = scripts.update_contact_sql
-    # last_name = params.get('last', None)
-    # first_name = params.get('first', None)
-    # company = params.get('company', None)
-    # email = params.get('email', None)
-    # home_phone = params.get('home', None)
-    # work_phone = params.get('work', None)
-    # notes = params.get('notes', None)
-    # contact_id = params.get('contact_id', None)
+    sql = scripts.update_contact_sql    
 
     sql_params = (
         contact[1],
@@ -98,14 +79,13 @@ def update_contact(contact:list):
         contact[5],
         contact[6],
         contact[7],
-        contact[0]
+        contact[0],
     )
-    print(sql_params)
+    logging.info(sql_params)
     conn = sqlite3.connect(db)
     cur = conn.cursor()
     cur.execute(sql, sql_params)
     conn.commit()
-
 
 
 def load_test_data(test_data):
@@ -124,4 +104,5 @@ def load_test_data(test_data):
 if __name__ == "__main__":
 
     contacts = read_db()
-    print(len(contacts))
+    contacts.pop(0)
+    logger.info(f'{len(contacts)} records in database.')
