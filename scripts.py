@@ -29,9 +29,10 @@ add_conctact_sql = """
             company,
             email,
             home_phone,
-            work_phone
+            work_phone,
+            notes
         )
-        VALUES (?,?,?,?,?,?);
+        VALUES (?,?,?,?,?,?,?);
     """
 
 
