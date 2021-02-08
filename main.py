@@ -53,7 +53,9 @@ class MainInterface(qtw.QMainWindow):
 
         # Buttons
         self.btn_new_contact = self.window.findChild(qtw.QPushButton, "btn_new_contact")
-        self.btn_new_contact.clicked.connect(self.add_contact)
+        self.btn_new_contact.clicked.connect(self.new_contact)
+        self.btn_save = self.window.findChild(qtw.QPushButton, 'btn_save')
+        self.btn_save.clicked.connect(self.save_contact)
 
         self.load_interface()
 
@@ -123,8 +125,53 @@ class MainInterface(qtw.QMainWindow):
         self.te_notes.setText(contact[7])
         logger.info(contact)
 
-    def add_contact(self):
-        print("Add Contact")
+    def new_contact(self):
+        print('NEW')
+        self.btn_save.setEnabled(True)
+        self.lbl_full_name.setText("")
+        self.lbl_company.setText("")
+        self.le_last_name.setText("")
+        self.le_last_name.setReadOnly(False)
+        self.le_first_name.setText("")
+        self.le_first_name.setReadOnly(False)
+        self.le_company.setText("")
+        self.le_company.setReadOnly(False)
+        self.le_email.setText("")
+        self.le_email.setReadOnly(False)
+        self.le_home_phone.setText("")
+        self.le_home_phone.setReadOnly(False)
+        self.le_work_phone.setText("")
+        self.le_work_phone.setReadOnly(False)
+        self.te_notes.setText("")
+    
+    def save_contact(self):
+        last = self.le_last_name.text
+        first = self.le_first_name.text
+        company = self.le_company.text
+        email = self.le_email.text
+        home_phone = self.le_home_phone.text
+        work_phone = self.le_work_phone.text
+        notes = self.te_notes.text
+
+        valid = False
+
+        params = (
+            last,
+            first,
+            company,
+            email,
+            home_phone,
+            work_phone,
+            notes
+        )
+
+        for p in params:
+            if len(p.strip()) != 0:
+                valid = True
+        if valid:
+            db.add_contact(*params)
+        else:
+            pass
 
 
 if __name__ == "__main__":
