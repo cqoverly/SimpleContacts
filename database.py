@@ -4,10 +4,10 @@ from pathlib import Path
 
 import scripts
 
-logger = logging.getLogger('app_logger')
-logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(process)d - %(levelname)s - %(message)s')
+# logger = logging.getLogger('app_logger')
+# logging.basicConfig(
+#         level=logging.DEBUG,
+#         format='%(process)d - %(levelname)s - %(message)s')
 
 db = "contacts.db"
 
