@@ -59,9 +59,9 @@ def get_contact(contact_id: int) -> list:
     return contact
 
 
-def add_contact(last, first, company, email, home_phone, work_phone):
+def add_contact(last, first, company, email, home_phone, work_phone, notes):
     sql = scripts.add_conctact_sql
-    params = (last, first, company, email, home_phone, work_phone)
+    params = (last, first, company, email, home_phone, work_phone, notes)
     conn = sqlite3.connect(db)
     cur = conn.cursor()
     cur.execute(sql, params)
