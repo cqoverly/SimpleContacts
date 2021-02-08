@@ -11,6 +11,7 @@ import scripts
 
 db = "contacts.db"
 
+
 def check_db():
     if not Path(db).is_file():
         import csv
@@ -22,7 +23,7 @@ def check_db():
             reader = csv.reader(test_file)
             test_data = [r for r in reader]
         load_test_data(test_data)
-        logger.info('Test dabase created.')
+        # logger.info("Test dabase created.")
 
 
 def get_cursor():
@@ -69,7 +70,7 @@ def add_contact(last, first, company, email, home_phone, work_phone):
 
 def update_contact(contact: list):
 
-    sql = scripts.update_contact_sql    
+    sql = scripts.update_contact_sql
 
     sql_params = (
         contact[1],
@@ -105,4 +106,4 @@ if __name__ == "__main__":
 
     contacts = read_db()
     contacts.pop(0)
-    logger.info(f'{len(contacts)} records in database.')
+    # logger.info(f"{len(contacts)} records in database.")
