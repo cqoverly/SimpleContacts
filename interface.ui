@@ -323,6 +323,7 @@
  <tabstops>
   <tabstop>le_last_name</tabstop>
   <tabstop>le_first_name</tabstop>
+  <tabstop>le_company</tabstop>
   <tabstop>le_email</tabstop>
   <tabstop>le_home_phone</tabstop>
   <tabstop>le_work_phone</tabstop>
