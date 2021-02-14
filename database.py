@@ -16,7 +16,7 @@ def check_db():
     if not Path(db).is_file():
         import csv
 
-        test_data_file = "dataFeb-6-2021.csv"
+        test_data_file = "test_data.csv"
         test_data = []
         build_db()
         with open(test_data_file, "r") as test_file:
@@ -89,6 +89,24 @@ def update_contact(contact: list):
     conn.commit()
 
 
+def delete_contact(name):
+    name = name.split(sep=',')
+    last = name[0].strip()
+    first = name[1].strip()
+    sql = """
+        SELECT * 
+        FROM contacts
+        WHERE last_name = ?
+        AND first_name = ?
+    """
+    conn = sqlite3.connect(db)
+    cur = conn.cursor()
+    cur.execute(sql, (last, first))
+    id = cur.fetchone()[0]
+    print(f'ID is {id}')
+    cur.execute(scripts.delete_contact, (id,))
+    conn.commit()
+
 def load_test_data(test_data):
     conn = sqlite3.connect(db)
     cur = conn.cursor()
@@ -100,6 +118,8 @@ def load_test_data(test_data):
         except:
             conn.rollback()
     return True
+
+
 
 
 if __name__ == "__main__":

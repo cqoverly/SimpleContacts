@@ -59,6 +59,8 @@ class MainInterface(qtw.QMainWindow):
         self.btn_save.clicked.connect(self.save_contact)
         self.btn_edit = self.window.findChild(qtw.QPushButton, 'btn_edit')
         self.btn_edit.clicked.connect(self.edit_contact)
+        self.btn_delete = self.window.findChild(qtw.QPushButton, 'btn_delete')
+        self.btn_delete.clicked.connect(self.delete_contact)
 
         self.load_interface()
         self.lw_contact_list.setCurrentRow(0)
@@ -176,6 +178,12 @@ class MainInterface(qtw.QMainWindow):
         self.le_home_phone.setText("")
         self.le_work_phone.setText("")
         self.te_notes.setText("")
+
+    def delete_contact(self):
+            item = self.lw_contact_list.currentItem()
+            db.delete_contact(item.text())
+            logger.warning(f'Deleted contact {item.text()}')
+            self.load_interface()
     
     def save_contact(self):
         last = self.le_last_name.text()
