@@ -217,6 +217,7 @@ class MainInterface(qtw.QMainWindow):
             else:
                 db.add_contact(*params)
                 self.btn_save.setEnabled(False)
+                self.lbl_message.setText('')
                 self.load_contact_list()
                 items = self.lw_contact_list.findItems(f'{last}, {first}', qtc.Qt.MatchContains)
                 if len(items) > 0:
