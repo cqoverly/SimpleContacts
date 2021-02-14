@@ -47,3 +47,8 @@ update_contact_sql = """
     notes = ?
     WHERE contact_id = ?;
 """
+
+delete_contact = """
+    DELETE FROM contacts
+    WHERE contact_id = ?
+"""
