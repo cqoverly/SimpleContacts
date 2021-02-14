@@ -307,6 +307,25 @@
      <string>Save</string>
     </property>
    </widget>
+   <widget class="QLabel" name="lbl_message">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>216</x>
+      <y>270</y>
+      <width>301</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -314,7 +333,7 @@
      <x>0</x>
      <y>0</y>
      <width>538</width>
-     <height>19</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>
