@@ -6,6 +6,7 @@ from PySide2 import QtWidgets as qtw
 from PySide2 import QtGui as qtg
 from PySide2 import QtCore as qtc
 from PySide2 import QtUiTools as qtu
+from PySide2 import Qt
 
 import database as db
 
@@ -34,6 +35,7 @@ class MainInterface(qtw.QMainWindow):
         # Labels
         self.lbl_full_name = self.window.findChild(qtw.QLabel, "lbl_full_name")
         self.lbl_company = self.window.findChild(qtw.QLabel, "lbl_company")
+        self.lbl_message = self.window.findChild(qtw.QLabel, 'lbl_message')
 
         # Listviews
         self.lw_contact_list = self.window.findChild(qtw.QListWidget, "lw_contact_list")
@@ -81,6 +83,28 @@ class MainInterface(qtw.QMainWindow):
 
         """
 
+        # load contact_list and get back sorted list of contacts.
+        contact_names = self.load_contact_list()
+        c_id = self.list_dict[contact_names[0]]
+        initial_contact = db.get_contact(c_id)
+
+
+        # set fields in ui
+        self.lbl_full_name.setText(f"{initial_contact[2]} {initial_contact[1]}")
+        self.lbl_company.setText(initial_contact[3])
+        self.lbl_message.setText('')
+        self.le_last_name.setText(initial_contact[1])
+        self.le_first_name.setText(initial_contact[2])
+        self.le_company.setText(initial_contact[3])
+        self.le_email.setText(initial_contact[4])
+        self.le_home_phone.setText(initial_contact[5])
+        self.le_work_phone.setText(initial_contact[6])
+        self.te_notes.setText(initial_contact[7])
+
+        logger.info(initial_contact)
+
+
+    def load_contact_list(self):
         logger.info("Loading interface")
         contacts = db.read_db()
 
@@ -99,22 +123,9 @@ class MainInterface(qtw.QMainWindow):
             self.list_dict[list_name] = c[0]
 
         contact_names.sort()
+        self.lw_contact_list.clear()
         self.lw_contact_list.addItems(contact_names)
-        c_id = self.list_dict[contact_names[0]]
-        initial_contact = db.get_contact(c_id)
-
-        # set fields in ui
-        self.lbl_full_name.setText(f"{initial_contact[2]} {initial_contact[1]}")
-        self.lbl_company.setText(initial_contact[3])
-        self.le_last_name.setText(initial_contact[1])
-        self.le_first_name.setText(initial_contact[2])
-        self.le_company.setText(initial_contact[3])
-        self.le_email.setText(initial_contact[4])
-        self.le_home_phone.setText(initial_contact[5])
-        self.le_work_phone.setText(initial_contact[6])
-        self.te_notes.setText(initial_contact[7])
-
-        logger.info(initial_contact)
+        return contact_names
 
     def load_contact(self, item):
         self.save_contact_id = self.list_dict[item.text()]
@@ -131,6 +142,7 @@ class MainInterface(qtw.QMainWindow):
         self.te_notes.setText(contact[7])
         self.disable_editing()
         logger.info(contact)
+
 
     def enable_editing(self):
         self.btn_save.setEnabled(True)
@@ -194,12 +206,31 @@ class MainInterface(qtw.QMainWindow):
                 params.insert(0, self.save_contact_id)
                 db.update_contact(params)
                 self.btn_save.setEnabled(False)
+                self.lbl_message.setText('')
+                items = self.lw_contact_list.findItems(f'{last}, {first}', qtc.Qt.MatchContains)
+                if len(items) > 0:
+                    item = items[0]
+                    self.lw_contact_list.setCurrentItem(item)
+                    self.load_contact(item)
+                else:
+                    logger.info('Item not found.')
             else:
                 db.add_contact(*params)
                 self.btn_save.setEnabled(False)
-                self.load_interface()
+                self.load_contact_list()
+                items = self.lw_contact_list.findItems(f'{last}, {first}', qtc.Qt.MatchContains)
+                if len(items) > 0:
+                    item = items[0]
+                    self.lw_contact_list.setCurrentItem(item)
+                    self.load_contact(item)
+                else:
+                    logger.info('Item not found.')
+                
+
         else:
             logger.warning('Did not save contact. Contact must have either last of first name, or company name.')
+            self.lbl_message.setText('Missing required fields.')
+            self.lbl_message.setStyleSheet('QLabel {color: red;}')
             pass
 
     def edit_contact(self):
