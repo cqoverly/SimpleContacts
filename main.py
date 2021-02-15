@@ -69,20 +69,38 @@ class MainInterface(qtw.QMainWindow):
 
     def load_interface(self):
         """
-        load_interface calls db.read_db() to collect contact data from the 
-        database. A list is returned from db.read_db() as follows:
-        (
-            contact_id,
-            last_name,
-            first_name,
-            company,
-            email,
-            home_phone,
-            work_phone,
-            notes
-        )
+        Calls db.read_db(), via self.load_contact_list, to collect contact data from the database. 
+        A list of tuples with individual contact information is returned
+        from db.read_db() returned as follows:
+        
+        [
+            (
+                contact_id,
+                last_name,
+                first_name, 
+                company,
+                email,
+                home_phone,
+                work_phone,
+                notes
+            ),
+            (
+                contact_id,
+                last_name,
+                first_name, 
+                company,
+                email,
+                home_phone,
+                work_phone,
+                notes
+            ),
+            ...
+        ]
 
-
+        Calls self.load_contact_list for filling listview
+        Calls load contact to load first contact from sorted
+        contact list into each entry lineEdit text box for display
+        of contact information and editing.
         """
 
         # load contact_list and get back sorted list of contacts.
@@ -107,6 +125,12 @@ class MainInterface(qtw.QMainWindow):
 
 
     def load_contact_list(self):
+        '''
+        Pulls list of tuples containing individiual contact information
+        from the contact database. Generates a string from the last_name
+        and first_name from each contact in list and loads them into 
+        lw_contact_list listview of the gui.
+        '''
         logger.info("Loading interface")
         contacts = db.read_db()
 
@@ -130,6 +154,14 @@ class MainInterface(qtw.QMainWindow):
         return contact_names
 
     def load_contact(self, item):
+        '''
+        param: QtListWidgetItem
+
+        Parses last name and first name from the passed QtListWidgetItem
+        to query the contact database for contact information, receiving a 
+        tuple containing the contact's information. This information is
+        then loaded into the contact information lineEdit fields.
+        '''
         self.save_contact_id = self.list_dict[item.text()]
         print(self.save_contact_id)
         contact = db.get_contact(self.list_dict[item.text()])
@@ -147,6 +179,9 @@ class MainInterface(qtw.QMainWindow):
 
 
     def enable_editing(self):
+        '''
+        Sets lineEdit fields to allow editing.
+        '''
         self.btn_save.setEnabled(True)
         self.le_last_name.setReadOnly(False)
         self.le_first_name.setReadOnly(False)
@@ -157,6 +192,9 @@ class MainInterface(qtw.QMainWindow):
         self.te_notes.setReadOnly(False)
 
     def disable_editing(self):
+        '''
+        Sets lineEdit fields to disallow editing.
+        '''
         self.btn_save.setEnabled(False)
         self.le_last_name.setReadOnly(True)
         self.le_first_name.setReadOnly(True)
@@ -167,25 +205,39 @@ class MainInterface(qtw.QMainWindow):
         self.te_notes.setReadOnly(True)
 
     def new_contact(self):
+        '''
+        Clears lineEdit contact info fields and sets them
+        to allow them to be edited.
+        '''
         self.save_contact_id = None
         self.enable_editing()
-        self.lbl_full_name.setText("")
-        self.lbl_company.setText("")
-        self.le_last_name.setText("")
-        self.le_first_name.setText("")
-        self.le_company.setText("")
-        self.le_email.setText("")
-        self.le_home_phone.setText("")
-        self.le_work_phone.setText("")
-        self.te_notes.setText("")
+        self.lbl_full_name.clear()
+        self.lbl_company.clear()
+        self.le_last_name.clear()
+        self.le_first_name.clear()
+        self.le_company.clear()
+        self.le_email.clear()
+        self.le_home_phone.clear()
+        self.le_work_phone.clear()
+        self.te_notes.clear()
 
     def delete_contact(self):
+        '''
+        Deletes the lw_contact_list item that is currently selected
+        and removes it from the database.
+        '''
             item = self.lw_contact_list.currentItem()
             db.delete_contact(item.text())
             logger.warning(f'Deleted contact {item.text()}')
             self.load_interface()
     
     def save_contact(self):
+        '''
+        Saves edited contact information to the database. If the 
+        contact already exists in the database, the contact is
+        updated. If the contact is a new contact, it is added to 
+        the contacts database.
+        '''
         last = self.le_last_name.text()
         first = self.le_first_name.text()
         company = self.le_company.text()
